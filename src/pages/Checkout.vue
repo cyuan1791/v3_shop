@@ -29,6 +29,7 @@ let intentedCalled = false;
 let callIntent = async (cartStore: any) => {
     if (!productStore.loaded)
         return;
+    cons
     if (!intentedCalled)
         console.log('totala:', parseInt(cartStore.total) * 100);
 
