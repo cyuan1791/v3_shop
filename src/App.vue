@@ -6,7 +6,6 @@ import { useCartStore } from './store/cart'
 import { useProductStore } from './store/products'
 
 const productStore = useProductStore()
-console.log("productStore");
 const cartStore = useCartStore()
 
 //productStore.fetchAll()

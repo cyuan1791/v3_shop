@@ -15,15 +15,12 @@ interface ProductState {
   items: Record<string, Product>;
   ids: number[];
 }
-console.log("asoneData", asoneData);
 const data: Product[] = asoneData;
 var items: Record<string, Product> = {};
 var ids = data.map((product) => {
   items[product.id] = product;
   return product.id;
 });
-console.log("items", items);
-console.log("ids", ids);
 
 export const useProductStore = defineStore("products", {
   state: (): ProductState => ({
