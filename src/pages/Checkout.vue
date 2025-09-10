@@ -64,7 +64,7 @@ const handleSubmit = async () => {
     if (isLoading.value) {
         return;
     }
-    cartStore.clear();
+    //cartStore.clear();
 
     isLoading.value = true;
 

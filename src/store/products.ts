@@ -1,8 +1,6 @@
 import { defineStore } from "pinia";
 import { asoneData } from "@/shared/utils";
 
-const fakeStoreUrl = "https://fakestoreapi.com";
-
 export interface Product {
   id: number;
   title: string;
@@ -17,13 +15,20 @@ interface ProductState {
   items: Record<string, Product>;
   ids: number[];
 }
+console.log("asoneData", asoneData);
+const data: Product[] = asoneData;
+var items: Record<string, Product> = {};
+var ids = data.map((product) => {
+  items[product.id] = product;
+  return product.id;
+});
+console.log("items", items);
+console.log("ids", ids);
 
-export const useProductStore = defineStore({
-  id: "products",
-
+export const useProductStore = defineStore("products", {
   state: (): ProductState => ({
-    items: {},
-    ids: [],
+    items: items,
+    ids: ids,
   }),
 
   getters: {
@@ -33,23 +38,6 @@ export const useProductStore = defineStore({
 
     loaded(): boolean {
       return this.ids.length > 0;
-    },
-  },
-
-  actions: {
-    async fetchAll() {
-      //console.log("Fetching products...");
-      if (this.loaded) return;
-      //const jstr = JSON.stringify(asoneData[0]);
-      //console.log(`asoneDate: ${jstr})`);
-      //const res = await fetch(`${fakeStoreUrl}/products`);
-      //const data: Product[] = await res.json();
-      const data: Product[] = asoneData;
-      this.ids = data.map((product) => {
-        this.items[product.id] = product;
-        return product.id;
-      });
-      //console.log(`Fetched ${this.ids.length} products.`);
     },
   },
 });

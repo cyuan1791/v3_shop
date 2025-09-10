@@ -19,12 +19,16 @@ export interface CartPreview {
   quantity: number;
   cost: number;
 }
+var cartContent = {};
 
-export const useCartStore = defineStore({
-  id: "cart",
-
+if (localStorage.getItem(CART_STORAGE) === null) {
+  cartContent = {};
+} else {
+  cartContent = JSON.parse(localStorage.getItem(CART_STORAGE) as string);
+}
+export const useCartStore = defineStore("cart", {
   state: (): CartState => ({
-    contents: JSON.parse(localStorage.getItem(CART_STORAGE) as string) ?? {},
+    contents: cartContent,
   }),
 
   getters: {
