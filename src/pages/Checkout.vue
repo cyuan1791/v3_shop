@@ -2,13 +2,10 @@
 import { loadStripe } from "@stripe/stripe-js";
 import { ref, onMounted, computed } from 'vue'
 
-import SrMessages from '../components/SrMessages.vue';
-import CartCard from '../components/CartCard.vue'
-import CartCardSkeleton from '../components/CartCardSkeleton.vue'
+
 import { toCurrency, asoneArea, asonePath, fetchData } from '../shared/utils'
 import { useCartStore } from '../store/cart'
 import { useProductStore } from '../store/products'
-import { i } from "vite/dist/node/types.d-aGj9QkWt";
 
 
 const cartStore = useCartStore()
@@ -20,44 +17,42 @@ const isLoading = ref(false);
 const messages = ref([]);
 
 
-//@ts-ignore
-let stripe;
-//@ts-ignore
-let elements;
-let intentedCalled = false;
-
-let callIntent = async (cartStore: any) => {
-    if (!productStore.loaded)
-        return;
-    if (!intentedCalled)
-        console.log('totala:', parseInt(cartStore.total) * 100);
-
-    const { publishableKey } = await fetch(`${window.location.origin}/${asonePath}/${asoneArea}/ws/php/public/config.php`).then((res) => res.json());
-    stripe = await loadStripe(publishableKey);
-
-    const { clientSecret, data, error: backendError } = await fetchData(
-        `${window.location.origin}/${asonePath}/${asoneArea}/ws/php/public/createintent.php`,
-        parseInt(cartStore.total) * 100
-    );
-    intentedCalled = true;
-    console.log("Fetched data:", { clientSecret, data, backendError });
 
 
-    if (backendError) {
-        // @ts-ignore
-        messages.value.push(backendError.message);
-    }
+onMounted(() => {
     //@ts-ignore
-    messages.value.push(`Client secret returned.`);
-
+    let stripe;
     //@ts-ignore
-    elements = stripe.elements({ clientSecret });
-    const paymentElement = elements.create('payment');
-    paymentElement.mount("#payment-element");
-    const linkAuthenticationElement = elements.create("linkAuthentication");
-    linkAuthenticationElement.mount("#link-authentication-element");
-    isLoading.value = false;
-};
+    let elements;
+    let callIntent = async (cartStore: any) => {
+
+        const { publishableKey } = await fetch(`${window.location.origin}/${asonePath}/${asoneArea}/ws/php/public/config.php`).then((res) => res.json());
+        stripe = await loadStripe(publishableKey);
+
+        const { clientSecret, data, error: backendError } = await fetchData(
+            `${window.location.origin}/${asonePath}/${asoneArea}/ws/php/public/createintent.php`,
+            parseInt(cartStore.total) * 100
+        );
+        //console.log("Fetched data:", { clientSecret, data, backendError });
+
+
+        if (backendError) {
+            // @ts-ignore
+            messages.value.push(backendError.message);
+        }
+        //@ts-ignore
+        messages.value.push(`Client secret returned.`);
+
+        //@ts-ignore
+        elements = stripe.elements({ clientSecret });
+        const paymentElement = elements.create('payment');
+        paymentElement.mount("#payment-element");
+        const linkAuthenticationElement = elements.create("linkAuthentication");
+        linkAuthenticationElement.mount("#link-authentication-element");
+        isLoading.value = false;
+    };
+    callIntent(cartStore);
+});
 
 const handleSubmit = async () => {
 
@@ -104,11 +99,8 @@ const handleSubmit = async () => {
                 </button>
                 <!-- <sr-messages :messages="messages" /> -->
             </form>
-            <div style="display:none;">
-                {{ callIntent(cartStore) }}
-            </div>
+
         </div>
-        <div class="col-12 col-md-3 mb-1"></div>
     </div>
 
 
