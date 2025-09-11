@@ -20,14 +20,11 @@ const messages = ref([]);
 
 
 onMounted(() => {
-    //@ts-ignore
-    let stripe;
-    //@ts-ignore
-    let elements;
+
     let callIntent = async (cartStore: any) => {
 
         const { publishableKey } = await fetch(`${window.location.origin}/${asonePath}/${asoneArea}/ws/php/public/config.php`).then((res) => res.json());
-        stripe = await loadStripe(publishableKey);
+        const stripe = await loadStripe(publishableKey);
 
         const { clientSecret, data, error: backendError } = await fetchData(
             `${window.location.origin}/${asonePath}/${asoneArea}/ws/php/public/createintent.php`,
@@ -44,7 +41,7 @@ onMounted(() => {
         messages.value.push(`Client secret returned.`);
 
         //@ts-ignore
-        elements = stripe.elements({ clientSecret });
+        const elements = stripe.elements({ clientSecret });
         const paymentElement = elements.create('payment');
         paymentElement.mount("#payment-element");
         const linkAuthenticationElement = elements.create("linkAuthentication");
