@@ -1,9 +1,8 @@
 <script setup lang="ts">
 import { loadStripe } from "@stripe/stripe-js";
-import { ref, onMounted, computed } from 'vue'
+import { ref, computed } from 'vue'
 
-
-import { toCurrency, asoneArea, asonePath, fetchData } from '../shared/utils'
+import { asoneArea, asonePath, fetchData } from '../shared/utils'
 import { useCartStore } from '../store/cart'
 import { useProductStore } from '../store/products'
 
@@ -17,39 +16,44 @@ const isLoading = ref(false);
 const messages = ref([]);
 
 
+//@ts-ignore
+let stripe;
+//@ts-ignore
+let elements;
+let intentedCalled = false;
+
+let callIntent = async (cartStore: any) => {
+    if (!productStore.loaded)
+        return;
+    if (!intentedCalled)
+        console.log('totala:', parseInt(cartStore.total));
+
+    const { publishableKey } = await fetch(`${window.location.origin}/${asonePath}/${asoneArea}/ws/php/public/config.php`).then((res) => res.json());
+    stripe = await loadStripe(publishableKey);
+
+    const { clientSecret, data, error: backendError } = await fetchData(
+        `${window.location.origin}/${asonePath}/${asoneArea}/ws/php/public/createintent.php`,
+        parseInt(cartStore.total)
+    );
+    intentedCalled = true;
+    console.log("Fetched data:", { clientSecret, data, backendError });
 
 
-onMounted(() => {
+    if (backendError) {
+        // @ts-ignore
+        messages.value.push(backendError.message);
+    }
+    //@ts-ignore
+    messages.value.push(`Client secret returned.`);
 
-    let callIntent = async (cartStore: any) => {
-
-        const { publishableKey } = await fetch(`${window.location.origin}/${asonePath}/${asoneArea}/ws/php/public/config.php`).then((res) => res.json());
-        const stripe = await loadStripe(publishableKey);
-
-        const { clientSecret, data, error: backendError } = await fetchData(
-            `${window.location.origin}/${asonePath}/${asoneArea}/ws/php/public/createintent.php`,
-            parseInt(cartStore.total) * 100
-        );
-        //console.log("Fetched data:", { clientSecret, data, backendError });
-
-
-        if (backendError) {
-            // @ts-ignore
-            messages.value.push(backendError.message);
-        }
-        //@ts-ignore
-        messages.value.push(`Client secret returned.`);
-
-        //@ts-ignore
-        const elements = stripe.elements({ clientSecret });
-        const paymentElement = elements.create('payment');
-        paymentElement.mount("#payment-element");
-        const linkAuthenticationElement = elements.create("linkAuthentication");
-        linkAuthenticationElement.mount("#link-authentication-element");
-        isLoading.value = false;
-    };
-    callIntent(cartStore);
-});
+    //@ts-ignore
+    elements = stripe.elements({ clientSecret });
+    const paymentElement = elements.create('payment');
+    paymentElement.mount("#payment-element");
+    const linkAuthenticationElement = elements.create("linkAuthentication");
+    linkAuthenticationElement.mount("#link-authentication-element");
+    isLoading.value = false;
+};
 
 const handleSubmit = async () => {
 
@@ -96,8 +100,11 @@ const handleSubmit = async () => {
                 </button>
                 <!-- <sr-messages :messages="messages" /> -->
             </form>
-
+            <div style="display:none;">
+                {{ callIntent(cartStore) }}
+            </div>
         </div>
+        <div class="col-12 col-md-3 mb-1"></div>
     </div>
 
 

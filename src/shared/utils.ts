@@ -42,7 +42,7 @@ export async function fetchData(
     throw error;
   }
 }
-export const toCurrency = (value: number) => formatter.format(value);
+export const toCurrency = (value: number) => formatter.format(value / 100);
 export const asoneModName = window.asoneModName;
 export const asoneId = window.asoneId;
 export const asoneIdx = window.asoneIdx;
