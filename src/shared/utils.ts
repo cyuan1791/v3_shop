@@ -50,3 +50,4 @@ export const asonePath = window.asonePath;
 export const asoneArea = window.asoneArea;
 export const asoneLoc = window.asoneLoc;
 export const asoneData = JSON.parse(atob(window.asoneData));
+export const asoneDataHTML = JSON.parse(atob(window.asoneDataHTML));
