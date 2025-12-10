@@ -32,7 +32,7 @@ const cartStore = useCartStore();
             {{ product.title }}
           </router-link>
         </h2>
-        <p v-text="product.content" />
+        <p v-text="product.description" />
 
         <p>{{ toCurrency(product.price) }}</p>
         <div class="justify-end card-actions">
