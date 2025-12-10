@@ -19,8 +19,8 @@ const count = computed(() => cartStore.count);
         <span class="btn btn-outline-dark"> Shop </span>
       </router-link>
       <router-link class="btn rounded-btn" to="/cart">
-        <span class="btn btn-outline-danger">
-          <span class="fas fa-shopping-cart"></span> &nbsp;&nbsp;
+        <span class="btn btn-outline-danger text-center">
+          <span class="fas fa-shopping-cart"></span> &nbsp;
           <div class="badge text-bg-secondary" v-text="count" />
         </span>
       </router-link>
