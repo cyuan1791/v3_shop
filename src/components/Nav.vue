@@ -11,7 +11,7 @@ const count = computed(() => cartStore.count);
 <template>
   <div class="d-flex justify-content-center">
     <div
-      class="btn-group m-4 p-3 w-75 bg-success-subtle"
+      class="btn-group m-4 p-3 w-100 bg-success-subtle"
       role="group"
       aria-label="Basic mixed styles example"
     >
@@ -20,7 +20,7 @@ const count = computed(() => cartStore.count);
       </router-link>
       <router-link class="btn rounded-btn" to="/cart">
         <span class="btn btn-outline-danger">
-          Cart &nbsp;&nbsp;
+          <span class="fas fa-shopping-cart"></span> &nbsp;&nbsp;
           <div class="badge text-bg-secondary" v-text="count" />
         </span>
       </router-link>
