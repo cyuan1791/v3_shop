@@ -1,22 +1,22 @@
 <script setup lang="ts">
-import { computed } from 'vue'
-import { useRoute } from 'vue-router'
+import { computed } from "vue";
+import { useRoute } from "vue-router";
 
-import { useCartStore } from '@/store/cart'
-import { useProductStore } from '@/store/products'
-import type { Product } from '@/store/products'
-import { toCurrency } from '@/shared/utils'
+import { useCartStore } from "@/store/cart";
+import { useProductStore } from "@/store/products";
+import type { Product } from "@/store/products";
+import { toCurrency } from "@/shared/utils";
 
-import CartCardSkeleton from '@/components/CartCardSkeleton.vue'
+import CartCardSkeleton from "@/components/CartCardSkeleton.vue";
 
-const cartStore = useCartStore()
-const productStore = useProductStore()
+const cartStore = useCartStore();
+const productStore = useProductStore();
 
-const route = useRoute()
+const route = useRoute();
 
 const product = computed<Product>(
-  () => productStore.items[route.params.productId as string],
-)
+  () => productStore.items[route.params.productId as string]
+);
 </script>
 
 <template>
@@ -27,10 +27,11 @@ const product = computed<Product>(
         <CartCardSkeleton />
       </div>
       <div v-else-if="product" class="card">
-        <img :src="product.image" alt="Card Image" class="card-img-top">
+        <img :src="product.image" alt="Card Image" class="card-img-top" />
         <div class="card-body">
           <h3 class="card-title" v-text="product.title" />
           <p v-text="product.description" />
+          <p v-text="product.content" />
           <p class="mt-4 text-lg">
             {{ toCurrency(product.price) }}
           </p>
