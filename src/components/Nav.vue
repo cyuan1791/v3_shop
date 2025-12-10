@@ -25,7 +25,7 @@ const count = computed(() => cartStore.count);
         </span>
       </router-link>
       <router-link class="btn btn-ghost rounded-btn" to="/about">
-        <span class="btn btn-outline-info"> About Us </span>
+        <span class="btn btn-outline-info"> About </span>
       </router-link>
     </div>
   </div>
