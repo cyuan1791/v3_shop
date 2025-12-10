@@ -24,6 +24,9 @@ const count = computed(() => cartStore.count);
           <div class="badge text-bg-secondary" v-text="count" />
         </span>
       </router-link>
+      <router-link class="btn btn-ghost rounded-btn" to="/about">
+        <span class="btn btn-outline-info"> About Us </span>
+      </router-link>
     </div>
   </div>
   <div class="d-flex justify-content-center">

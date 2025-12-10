@@ -6,11 +6,11 @@ import { useCartStore } from "./store/cart";
 import { useProductStore } from "./store/products";
 import { asoneDataHTML } from "@/shared/utils";
 
-const productStore = useProductStore();
+//const productStore = useProductStore();
 const cartStore = useCartStore();
 const homeTopHTML = ref("");
 const homeBottomHTML = ref("");
-console.log("asoneDataHTML:", asoneDataHTML);
+//console.log("asoneDataHTML:", asoneDataHTML);
 
 if (asoneDataHTML.HomeTop) {
   homeTopHTML.value = asoneDataHTML.HomeTop.tcode;
