@@ -31,7 +31,7 @@ export const useProductStore = defineStore("products", {
 
   getters: {
     list(): Product[] {
-      return this.ids.map((i) => this.items[i]);
+      return this.ids.map((i) => this.items[i]).filter((p): p is Product => !!p && !!p.title);
     },
 
     loaded(): boolean {
