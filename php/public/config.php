@@ -13,7 +13,7 @@
         }
         return $rpath;
     }
-    $libPath = get_docroot() . '../../lib/stripe/php/vendor/autoload.php';
+    $libPath = get_docroot() . 'php/stripev15/vendor/autoload.php';
 
     require $libPath;
 

@@ -22,7 +22,8 @@ let intentedCalled = false;
 
 let callIntent = async (cartStore: any) => {
   if (!productStore.loaded) return;
-  if (!intentedCalled) console.log("totala:", parseInt(cartStore.total));
+  if (intentedCalled) return;
+  intentedCalled = true;
 
   const { publishableKey } = await fetch(
     `${window.location.origin}/${asonePath}/${asoneArea}/ws/php/public/config.php`
@@ -31,21 +32,17 @@ let callIntent = async (cartStore: any) => {
 
   const {
     clientSecret,
-    data,
     error: backendError,
   } = await fetchData(
     `${window.location.origin}/${asonePath}/${asoneArea}/ws/php/public/createintent.php`,
     parseInt(cartStore.total)
   );
-  intentedCalled = true;
-  //console.log("Fetched data:", { clientSecret, data, backendError });
 
   if (backendError) {
+    console.error("Checkout error:", backendError);
     // @ts-ignore
-    messages.value.push(backendError.message);
+    messages.value.push(backendError);
   }
-  //@ts-ignore
-  messages.value.push(`Client secret returned.`);
 
   //@ts-ignore
   elements = stripe.elements({ clientSecret });

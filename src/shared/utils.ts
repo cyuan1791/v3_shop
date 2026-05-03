@@ -22,18 +22,8 @@ export async function fetchData(
         paymment_intent: paymment_intent,
       }),
     };
-    // 1. Fetch the resource
     const response = await fetch(url, options);
-
-    // 2. Check for HTTP errors (e.g., 404, 500)
-    if (!response.ok) {
-      throw new Error(`util.ts 24:HTTP error! Status: ${response.status}`);
-    }
-
-    // 3. Parse the JSON response
     const data = await response.json();
-
-    // 4. Return the parsed data
     return data;
   } catch (error) {
     // 5. Handle any errors during the fetch or parsing process
